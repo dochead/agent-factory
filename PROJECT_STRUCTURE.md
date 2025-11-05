@@ -24,8 +24,16 @@ uv pip install -r requirements.txt
 ## Directory Structure
 
 ```
+~/.openhands/                    # OpenHands config (global)
+└── microagents/                 # Microagents live HERE (not in project)
+    ├── startup.md
+    ├── architect.md
+    ├── backend.md
+    ├── frontend.md
+    └── qa.md
+
 agent-factory/
-├── .openhands/                  # OpenHands microagents (shared)
+├── .openhands/                  # Source microagents (copy to ~/.openhands/)
 ├── README.md
 ├── START_HERE.md
 │

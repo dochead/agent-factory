@@ -7,7 +7,12 @@ Multi-agent development system for building Django + React applications.
 ### 1. Install OpenHands (one-time)
 
 ```bash
+# Install OpenHands
 uv tool install openhands-ai --python 3.12
+
+# Copy microagents to home directory (OpenHands looks here)
+mkdir -p ~/.openhands/microagents
+cp .openhands/microagents/*.md ~/.openhands/microagents/
 ```
 
 ### 2. Start OpenHands
