@@ -23,19 +23,10 @@ Build a complete todo app following the strict Backend → Binding (OpenAPI) →
 
 **Copy this prompt into OpenHands:**
 
-**Note:** The word "bootstrap" triggers the startup microagent.
+**Note:** The word "bootstrap" triggers the startup microagent, which has all the instructions.
 
 ```
 Bootstrap a new Django/React project called "todo-app".
-
-Follow ALL steps in the startup microagent exactly:
-1. Create todo-app/ subdirectory
-2. Set up backend with pyproject.toml and uv venv
-3. Set up frontend with Vite + TanStack
-4. Set up Docker services
-5. Initialize git
-
-Do NOT skip any steps.
 ```
 
 **Expected Results:**
