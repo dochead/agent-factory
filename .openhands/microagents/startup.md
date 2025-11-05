@@ -13,303 +13,225 @@ keywords:
 
 # Role
 
-Bootstrap new Django/React projects from scratch. Execute these steps ONE AT A TIME in order.
+Bootstrap new Python CLI tools from scratch using uv. Execute these steps ONE AT A TIME.
 
-**CRITICAL:** Execute each command separately. Do NOT try to run multiple steps at once.
+**CRITICAL:** Execute each command separately. Verify with `pwd` and `ls` frequently.
+
+## Instructions
+
+When the user asks to bootstrap/create a new tool, ask them:
+1. **Tool name** (e.g., "task-breaker", "code-analyzer")
+2. **One-line description** (e.g., "Breaks down tasks into steps")
+
+Then execute these steps:
 
 ## Step 1: Create Project Directory
 
 ```bash
 cd /workspace/agent-factory
-mkdir -p todo-app/backend todo-app/frontend todo-app/docker todo-app/docs
-cd todo-app
-pwd  # Verify you're in /workspace/agent-factory/todo-app
+mkdir -p {TOOL_NAME}
+cd {TOOL_NAME}
+pwd  # Verify location
 ```
 
-## Step 2: Initialize Backend (Django + uv)
+## Step 2: Create pyproject.toml
 
 ```bash
-cd backend
-
-# Create minimal pyproject.toml
-cat > pyproject.toml << 'PYPROJECT_EOF'
+cat > pyproject.toml << 'EOF'
 [project]
-name = "backend"
+name = "{TOOL_NAME}"
 version = "0.1.0"
+description = "{DESCRIPTION}"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=5.0",
-    "djangorestframework>=3.14",
-    "django-cors-headers>=4.3",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "ruff>=0.1",
     "pytest>=7.4",
-    "pytest-django>=4.5",
 ]
+
+[project.scripts]
+{TOOL_NAME} = "{TOOL_NAME}.cli:app"
 
 [tool.ruff]
 line-length = 120
 
-[tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "config.settings"
-PYPROJECT_EOF
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+EOF
 
-# Create venv and install
+ls -la
+```
+
+## Step 3: Create Source Files
+
+```bash
+mkdir -p {TOOL_NAME}
+
+# Create __init__.py
+cat > {TOOL_NAME}/__init__.py << 'EOF'
+"""
+{DESCRIPTION}
+"""
+__version__ = "0.1.0"
+EOF
+
+# Create cli.py
+cat > {TOOL_NAME}/cli.py << 'EOF'
+import typer
+from rich.console import Console
+
+app = typer.Typer()
+console = Console()
+
+@app.command()
+def main(
+    input_text: str = typer.Argument(..., help="Input text to process"),
+):
+    """
+    {DESCRIPTION}
+    """
+    console.print(f"[green]Processing:[/green] {input_text}")
+    # TODO: Add actual logic here
+    console.print("[blue]Done![/blue]")
+
+if __name__ == "__main__":
+    app()
+EOF
+
+ls -la {TOOL_NAME}/
+```
+
+## Step 4: Create README
+
+```bash
+cat > README.md << 'EOF'
+# {TOOL_NAME}
+
+{DESCRIPTION}
+
+## Installation
+
+```bash
 uv venv --python 3.12
 source .venv/bin/activate
 uv pip install -e ".[dev]"
+```
 
-# Create Django project
-uv run django-admin startproject config .
+## Usage
 
-# Create directory structure
-mkdir -p apps services api documents
+```bash
+{TOOL_NAME} "your input here"
+```
 
-# Create .env
-cat > .env << 'ENV_EOF'
-DJANGO_SECRET_KEY=dev-secret-key-change-in-production
-DEBUG=True
-ENV_EOF
+## Development
 
-# Create .gitignore
-cat > .gitignore << 'GITIGNORE_EOF'
+```bash
+# Format code
+ruff format .
+
+# Lint
+ruff check .
+
+# Run tests
+pytest
+```
+EOF
+
+ls -la
+```
+
+## Step 5: Initialize with uv
+
+```bash
+# Create venv
+uv venv --python 3.12
+
+# Activate and install
+source .venv/bin/activate
+uv pip install -e ".[dev]"
+
+# Verify installation
+which {TOOL_NAME}
+{TOOL_NAME} --help
+```
+
+## Step 6: Create .gitignore
+
+```bash
+cat > .gitignore << 'EOF'
 __pycache__/
 *.pyc
 .venv/
-db.sqlite3
-.env
 .pytest_cache/
-GITIGNORE_EOF
-
-pwd  # Verify you're in backend directory
-ls -la  # Show created files
-```
-
-## Step 3: Configure Django Settings
-
-```bash
-# Still in backend directory
-cd config
-
-# Update settings.py to use .env
-cat >> settings.py << 'SETTINGS_EOF'
-
-# Custom settings
-import os
-from pathlib import Path
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
-
-INSTALLED_APPS += [
-    "rest_framework",
-    "corsheaders",
-]
-
-MIDDLEWARE.insert(1, "corsheaders.middleware.CorsMiddleware")
-
-REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,
-}
-SETTINGS_EOF
-
-cd ..  # Back to backend directory
-```
-
-## Step 4: Verify Backend Setup
-
-```bash
-# Should still be in backend directory
-pwd  # Should show: /workspace/agent-factory/todo-app/backend
-
-# Check Django works
-source .venv/bin/activate
-python manage.py check
-
-# Show what we created
-ls -la
-```
-
-## Step 5: Initialize Frontend (Vite + React)
-
-```bash
-cd ../frontend  # Go to frontend directory
-
-# Create Vite project
-npm create vite@latest . -- --template react-ts
-
-# Install base dependencies
-npm install
-
-# Install TanStack
-npm install @tanstack/react-router @tanstack/react-query
-
-# Update vite.config.ts for API proxy
-cat > vite.config.ts << 'VITE_EOF'
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-    },
-  },
-})
-VITE_EOF
-
-pwd  # Should show: /workspace/agent-factory/todo-app/frontend
-ls -la
-```
-
-## Step 6: Create Docker Services
-
-```bash
-cd ../docker  # Go to docker directory
-
-cat > docker-compose.yml << 'DOCKER_EOF'
-version: '3.8'
-
-services:
-  postgres:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
-
-volumes:
-  postgres_data:
-DOCKER_EOF
-
-pwd  # Should show: /workspace/agent-factory/todo-app/docker
-```
-
-## Step 7: Create Project README
-
-```bash
-cd ..  # Back to todo-app root
-
-cat > README.md << 'README_EOF'
-# Todo App
-
-## Backend Setup
-```bash
-cd backend
-source .venv/bin/activate
-python manage.py migrate
-python manage.py runserver
-```
-
-## Frontend Setup
-```bash
-cd frontend
-npm run dev
-```
-
-## Docker Services
-```bash
-cd docker
-docker-compose up -d
-```
-README_EOF
-
-pwd  # Should show: /workspace/agent-factory/todo-app
-```
-
-## Step 8: Initialize Git
-
-```bash
-# Should be in todo-app root
-cd /workspace/agent-factory/todo-app
-
-cat > .gitignore << 'GIT_EOF'
-__pycache__/
-*.pyc
-.venv/
-node_modules/
+*.egg-info/
 dist/
-db.sqlite3
-.env
-GIT_EOF
+build/
+EOF
+```
 
+## Step 7: Initialize Git
+
+```bash
 git init
 git add .
-git commit -m "chore: initial project setup"
+git commit -m "feat: initial {TOOL_NAME} setup"
 
-pwd
 ls -la
 ```
 
-## Step 9: Final Verification
+## Step 8: Test It Works
 
 ```bash
-cd /workspace/agent-factory/todo-app
+# Verify you're in the right place
+pwd
 
-# Check backend
-cd backend
-ls -la pyproject.toml manage.py .venv/
-source .venv/bin/activate
-python manage.py check
-
-# Check frontend
-cd ../frontend
-ls -la package.json vite.config.ts
+# Test the CLI
+{TOOL_NAME} "test input"
 
 # Show structure
-cd ..
-find . -maxdepth 3 -type f -name "*.py" -o -name "*.json" -o -name "*.toml" | head -20
+find . -type f -name "*.py" -o -name "*.toml" -o -name "*.md" | grep -v .venv
 ```
 
 ## Success Criteria
 
-After completion, you should have:
-- ✅ `/workspace/agent-factory/todo-app/` directory
-- ✅ Backend: `pyproject.toml`, `manage.py`, `.venv/`, `config/`
-- ✅ Frontend: `package.json`, `vite.config.ts`, `src/`
-- ✅ Docker: `docker-compose.yml`
+After completion, verify:
+- ✅ Directory `/workspace/agent-factory/{TOOL_NAME}/` exists
+- ✅ `pyproject.toml` with correct dependencies
+- ✅ `{TOOL_NAME}/cli.py` with working CLI
+- ✅ `.venv/` created and activated
+- ✅ Command `{TOOL_NAME} --help` works
 - ✅ Git initialized
 
 ## Handoff
 
 Tell the user:
 
-> "✅ Project bootstrapped at `/workspace/agent-factory/todo-app/`
+> "✅ CLI tool '{TOOL_NAME}' bootstrapped at `/workspace/agent-factory/{TOOL_NAME}/`
 >
-> Next step: Use the **architect** agent to design the API.
+> You can now:
+> 1. Edit `{TOOL_NAME}/cli.py` to add your logic
+> 2. Test with: `{TOOL_NAME} "your input"`
+> 3. Run `ruff format .` before committing
 >
-> Prompt: `Design a todo app API with create, list, complete, delete operations.`"
+> The tool is installed in development mode - changes to .py files take effect immediately."
 
 ## Critical Rules
 
-1. **Execute commands ONE AT A TIME** - Do not batch commands
-2. **Always use `cd` to navigate** - Verify location with `pwd`
-3. **Use uv for Python** - Never use pip
-4. **Use heredocs for files** - One file at a time
-5. **Verify each step** - Use `ls -la` and `pwd` after major steps
+1. **Execute commands ONE AT A TIME** - Wait for each to complete
+2. **Replace {TOOL_NAME} and {DESCRIPTION}** with actual values
+3. **Use `pwd` frequently** - Verify you're in the right directory
+4. **Use uv for everything** - Never use pip or pip3
+5. **Activate venv** - `source .venv/bin/activate` before installing
 
 ## Anti-Patterns
 
-❌ Running entire script as one command
+❌ Running multiple commands in one go
 ❌ Creating files in wrong directory
-❌ Using `pip install`
-❌ Skipping verification steps
-❌ Not activating venv before Python commands
+❌ Using `pip install` instead of `uv pip install`
+❌ Forgetting to replace {TOOL_NAME} placeholders
+❌ Not activating venv before testing CLI
