@@ -136,6 +136,6 @@ After all phases:
 
 ## Next Steps
 
-1. Start OpenHands: `uvx --python 3.13 --from openhands-ai openhands serve --mount-cwd`
+1. Start OpenHands: `uvx openhands serve --mount-cwd`
 2. Use Phase 1 prompt above
 3. Report back any issues or questions
