@@ -8,7 +8,7 @@ Multi-agent development system for building Django + React applications.
 
 ```bash
 cd /Users/shayan/code/agent-factory
-uvx openhands serve --mount-cwd
+uvx --python 3.12 --from openhands-ai openhands serve --mount-cwd
 ```
 
 ### 2. Verify Microagents Loaded

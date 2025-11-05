@@ -93,7 +93,7 @@ When you start OpenHands from `/Users/shayan/code`, they are automatically loade
 Start OpenHands from your code directory:
 ```bash
 cd /Users/shayan/code
-uvx openhands serve --mount-cwd
+uvx --python 3.12 --from openhands-ai openhands serve --mount-cwd
 ```
 
 Verify microagents loaded (check terminal logs):
