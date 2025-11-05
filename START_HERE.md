@@ -17,6 +17,44 @@ When you use these keywords, OpenHands loads the relevant microagent into contex
 
 Build a complete todo app following the strict Backend → Binding (OpenAPI) → Frontend pattern.
 
+## Phase 0: Bootstrap Project Structure
+
+**CRITICAL: You MUST run this phase first. The other agents will refuse to work without proper project structure.**
+
+**Copy this prompt into OpenHands:**
+
+**Note:** The word "bootstrap" triggers the startup microagent.
+
+```
+Bootstrap a new Django/React project called "todo-app".
+
+Follow ALL steps in the startup microagent exactly:
+1. Create todo-app/ subdirectory
+2. Set up backend with pyproject.toml and uv venv
+3. Set up frontend with Vite + TanStack
+4. Set up Docker services
+5. Initialize git
+
+Do NOT skip any steps.
+```
+
+**Expected Results:**
+- Directory created: `/workspace/agent-factory/todo-app/`
+- Backend: `pyproject.toml`, `manage.py`, `.venv/`, Django project structure
+- Frontend: `package.json`, Vite config, TanStack setup
+- Docker: `docker-compose.yml` with Postgres, Redis, OpenSearch
+- Git initialized in project directory
+
+**Verify Bootstrap Worked:**
+```bash
+ls -la /workspace/agent-factory/todo-app/backend/
+# Should see: pyproject.toml, manage.py, .venv/, config/, services/, api/
+```
+
+**If bootstrap fails or is incomplete:** Stop and fix it before proceeding. The other agents depend on this structure.
+
+---
+
 ## Phase 1: Architecture & Design
 
 **Copy this prompt into OpenHands:**
@@ -54,7 +92,7 @@ IMPORTANT PATTERNS:
 Do NOT implement yet, just create the design artifacts.
 ```
 
-## Phase 2: Review & Approve
+## Phase 2: Review Architecture
 
 Once the architect agent completes:
 1. Review `api_contract.yaml` - is it complete?
@@ -141,6 +179,7 @@ After all phases:
 
 ## Expected Timeline
 
+- **Phase 0 (Bootstrap):** 10-20 minutes (OpenHands autonomous)
 - **Phase 1 (Design):** 15-30 minutes (OpenHands autonomous)
 - **Phase 2 (Review):** 5-10 minutes (you)
 - **Phase 3 (Backend):** 30-60 minutes (OpenHands autonomous)
@@ -148,6 +187,19 @@ After all phases:
 - **Phase 5 (Testing):** 20-40 minutes (OpenHands autonomous)
 
 **Total:** 2-3 hours of OpenHands runtime, with your review/approval between phases.
+
+## Common Issues
+
+### "Agent created files in /workspace/agent-factory/ directly"
+**Problem:** Bootstrap phase was skipped.
+**Solution:** Stop, delete files, run Phase 0 bootstrap first.
+
+### "Agent uses pip install instead of uv"
+**Problem:** Bootstrap phase was skipped (no pyproject.toml or venv).
+**Solution:** Stop, delete files, run Phase 0 bootstrap first.
+
+### "Backend agent refuses to work"
+**Good!** It's enforcing proper structure. Run Phase 0 bootstrap first.
 
 ## Next Steps
 
