@@ -88,12 +88,19 @@ These microagents are located at: `/Users/shayan/code/.openhands/microagents/`
 
 When you start OpenHands from `/Users/shayan/code`, they are automatically loaded.
 
+## Installation
+
+Install OpenHands (one-time):
+```bash
+uv tool install openhands-ai --python 3.12
+```
+
 ## Usage
 
 Start OpenHands from your code directory:
 ```bash
 cd /Users/shayan/code
-uvx --python 3.12 --from openhands-ai openhands serve --mount-cwd
+uvx openhands serve --mount-cwd
 ```
 
 Verify microagents loaded (check terminal logs):

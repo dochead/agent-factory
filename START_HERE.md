@@ -136,6 +136,7 @@ After all phases:
 
 ## Next Steps
 
-1. Start OpenHands: `uvx --python 3.12 --from openhands-ai openhands serve --mount-cwd`
-2. Use Phase 1 prompt above
-3. Report back any issues or questions
+1. Install OpenHands (one-time): `uv tool install openhands-ai --python 3.12`
+2. Start OpenHands: `cd /Users/shayan/code/agent-factory && uvx openhands serve --mount-cwd`
+3. Use Phase 1 prompt above
+4. Report back any issues or questions

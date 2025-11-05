@@ -4,11 +4,17 @@ Multi-agent development system for building Django + React applications.
 
 ## Quick Start
 
-### 1. Start OpenHands
+### 1. Install OpenHands (one-time)
+
+```bash
+uv tool install openhands-ai --python 3.12
+```
+
+### 2. Start OpenHands
 
 ```bash
 cd /Users/shayan/code/agent-factory
-uvx --python 3.12 --from openhands-ai openhands serve --mount-cwd
+uvx openhands serve --mount-cwd
 ```
 
 ### 2. Verify Microagents Loaded
