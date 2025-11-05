@@ -17,7 +17,9 @@ cd /Users/shayan/code/agent-factory
 uvx openhands serve --mount-cwd
 ```
 
-### 2. Verify Microagents Loaded
+**IMPORTANT:** OpenHands runs in its own isolated uv tool environment. Each project you build will have its own separate venv. See `PROJECT_STRUCTURE.md` for details.
+
+### 3. Verify Microagents Loaded
 
 Check terminal output for:
 ```
@@ -66,14 +68,20 @@ The OpenAPI contract is the single source of truth between backend and frontend.
 
 ## Projects
 
-Each project lives in its own directory:
+Each project lives in its own directory with separate venvs:
 ```
 agent-factory/
-├── .openhands/          # Microagents
-├── todo-app/            # First test project
+├── .openhands/          # OpenHands microagents (shared)
+├── todo-app/
+│   ├── backend/.venv/   # Backend Python venv (isolated)
+│   └── frontend/        # Frontend Node deps (isolated)
 ├── blog-app/            # Future project
+│   ├── backend/.venv/   # Separate venv
+│   └── frontend/
 └── ...
 ```
+
+**See `PROJECT_STRUCTURE.md` for critical venv separation guidelines.**
 
 ## Documentation
 
