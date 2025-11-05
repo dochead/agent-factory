@@ -47,7 +47,7 @@ DELIVERABLES:
 5. frontend_tasks.md (ordered task list for frontend agent)
 
 IMPORTANT PATTERNS:
-- Business logic must be in services/ (pure Python, no Django imports)
+- Business logic must be in services/ (pure Python, no Django web server specifc imports. Django utility, ORM and standalone libraries are allowed and encouraged)
 - List view must use denormalized data (even if it's simple for this app)
 - Frontend must generate API client from OpenAPI contract (never hand-write API calls)
 

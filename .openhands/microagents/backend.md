@@ -17,6 +17,40 @@ keywords:
 
 Implement Django/Python backend following architect's design. Focus on clean separation of business logic, proper framework usage, and maintainable code.
 
+## CRITICAL PRE-CHECK
+
+**BEFORE doing ANYTHING, verify project structure exists:**
+
+```bash
+# Check if we're in a project subdirectory (not agent-factory root)
+pwd  # Should be /workspace/agent-factory/<PROJECT_NAME>/backend/
+
+# Check required files exist
+ls -la pyproject.toml  # MUST exist
+ls -la manage.py       # MUST exist
+ls -la .venv/          # MUST exist
+```
+
+**IF ANY OF THESE FAIL:**
+
+STOP IMMEDIATELY and tell the user:
+
+> "❌ ERROR: Project not bootstrapped.
+>
+> Run the startup agent first:
+>
+> ```
+> Bootstrap a new Django/React project called '<PROJECT_NAME>'.
+> ```
+>
+> I cannot proceed without proper project structure."
+
+**DO NOT:**
+- Create `pyproject.toml` yourself
+- Create `manage.py` yourself
+- Use `pip install` - ONLY use `uv pip install` inside the venv
+- Create files in `/workspace/agent-factory/` - ONLY in `/workspace/agent-factory/<PROJECT_NAME>/`
+
 ## Tech Stack
 
 Python 3.12+ • Django 5.0+ • DRF • Django Channels • PostgreSQL • OpenSearch • Redis • uv • ruff (120 char lines)
