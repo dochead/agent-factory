@@ -2,6 +2,17 @@
 
 This is your first test of the multi-agent system.
 
+## How Microagents Work
+
+Microagents are triggered by **keywords** in your prompts:
+- **Startup**: "bootstrap", "initialize", "new project"
+- **Architect**: "design", "architecture", "openapi"
+- **Backend**: "django", "backend", "implement"
+- **Frontend**: "react", "frontend", "component"
+- **QA**: "test", "pytest", "qa"
+
+When you use these keywords, OpenHands loads the relevant microagent into context.
+
 ## Goal
 
 Build a complete todo app following the strict Backend → Binding (OpenAPI) → Frontend pattern.
@@ -9,6 +20,8 @@ Build a complete todo app following the strict Backend → Binding (OpenAPI) →
 ## Phase 1: Architecture & Design
 
 **Copy this prompt into OpenHands:**
+
+**Note:** The word "design" triggers the architect microagent.
 
 ```
 I want to design a todo application.
@@ -38,7 +51,7 @@ IMPORTANT PATTERNS:
 - List view must use denormalized data (even if it's simple for this app)
 - Frontend must generate API client from OpenAPI contract (never hand-write API calls)
 
-Use the architect microagent. Do NOT implement yet, just create the design artifacts.
+Do NOT implement yet, just create the design artifacts.
 ```
 
 ## Phase 2: Review & Approve
@@ -55,10 +68,10 @@ Once the architect agent completes:
 
 **Prompt:**
 
+**Note:** The words "Django" and "backend" trigger the backend microagent.
+
 ```
 Implement the Django backend for the todo app using backend_tasks.md and api_contract.yaml.
-
-Use the backend microagent.
 
 Follow these patterns strictly:
 - Business logic in services/todo_service.py (pure Python)
@@ -78,10 +91,10 @@ Run ruff format and ruff check before each commit.
 
 **Prompt:**
 
+**Note:** The words "React" and "frontend" trigger the frontend microagent.
+
 ```
 Implement the React frontend for the todo app using frontend_tasks.md and api_contract.yaml.
-
-Use the frontend microagent.
 
 Follow these patterns strictly:
 1. Generate API client from api_contract.yaml (use openapi-typescript or similar)
@@ -102,8 +115,10 @@ Create these commits as you go:
 
 **Prompt:**
 
+**Note:** The word "tests" triggers the qa microagent.
+
 ```
-Write tests for the todo app using the qa microagent.
+Write tests for the todo app.
 
 Focus on:
 1. Service layer tests (business logic)
